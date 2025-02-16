@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"example-webpage-scrap/model"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,14 +12,27 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func main() {
+const (
+	PORT = "8090"
+)
 
+func main() {
 	r := mux.NewRouter()
+	r.HandleFunc("/", DefaultHandler).Methods("GET")
 	r.HandleFunc("/exam-info", GetExamInfoHandler).Methods("GET")
 
-	fmt.Println("Server running on port 8090...")
-	if err := http.ListenAndServe(":8090", r); err != nil {
+	addr := fmt.Sprintf(":%s", PORT)
+	fmt.Println("Server running on port :", PORT)
+	if err := http.ListenAndServe(addr, r); err != nil {
 		log.Fatalf("Error starting server: %v", err)
+	}
+}
+
+func DefaultHandler(w http.ResponseWriter, r *http.Request) {
+	info := model.Response{Message: "running app on " + PORT, Status: true}
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(info); err != nil {
+		http.Error(w, fmt.Sprintf("Error encoding response: %v", err), http.StatusInternalServerError)
 	}
 }
 
