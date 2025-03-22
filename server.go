@@ -56,7 +56,6 @@ func GetExamInfoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExtractExamInfo(url string) (*ExamResult, error) {
-	// Fetch the HTML content from the URL
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch URL: %v", err)
@@ -89,17 +88,17 @@ func GetStudentExamInfo(doc *goquery.Document) (model StudentExamInfo) {
 		if cells.Length() == 2 {
 			key := cells.Eq(0).Text()
 			value := cells.Eq(1).Text()
-
+			key = strings.ReplaceAll(key, " ", "")
 			switch key {
-			case "Roll Number":
+			case "RollNumber", "RollNo", "ParticipantID":
 				model.RollNumber = value
-			case "Candidate Name":
+			case "CandidateName", "ParticipantName":
 				model.CandidateName = value
-			case "Venue Name", "Test Center Name":
+			case "VenueName", "TestCenterName":
 				model.VenueName = value
-			case "Exam Date", "Test Date":
+			case "ExamDate", "TestDate":
 				model.ExamDate = value
-			case "Exam Time", "Test Time":
+			case "ExamTime", "TestTime":
 				model.ExamTime = value
 			case "Subject":
 				model.Subject = value
