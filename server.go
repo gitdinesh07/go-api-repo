@@ -90,7 +90,7 @@ func GetStudentExamInfo(doc *goquery.Document) (model StudentExamInfo) {
 			value := cells.Eq(1).Text()
 			key = strings.ReplaceAll(key, " ", "")
 			switch key {
-			case "RollNumber", "RollNo", "ParticipantID":
+			case "RollNumber", "RollNo", "ParticipantID", "ParticipantID2":
 				model.RollNumber = value
 			case "CandidateName", "ParticipantName":
 				model.CandidateName = value
