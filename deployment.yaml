@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-go-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-go-app
+  template:
+    metadata:
+      labels:
+        app: my-go-app
+    spec:
+      containers:
+        - name: my-go-app
+          image: go_app:latest  # No need for Docker Hub
+          imagePullPolicy: Never  # This tells Kubernetes to use the local image
+          ports:
+            - containerPort: 8090
